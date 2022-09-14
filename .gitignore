@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # secret key
-primerapp/secret.py
+#primerapp/primerapp/secret.py
 
 # Distribution / packaging
 .Python
