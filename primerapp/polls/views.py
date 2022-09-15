@@ -4,8 +4,8 @@ from .models import Question
 
 # Create your views here.
 
-def index(request):
-    return HttpResponse("Hola mundo")
+"""def index(request):
+    return HttpResponse("Hola mundo")"""
 
 
 def detail(request, question_id):
