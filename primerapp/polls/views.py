@@ -26,8 +26,14 @@ def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     #output = ', '.join([q.question_text for q in latest_question_list])
     #return HttpResponse(output)
-    template = loader.get_template('polls/index.html')
+    
     context = {
         'questions' : latest_question_list,
     }
-    return HttpResponse(template.render(context, request))
+
+
+    #Lo que aparece comentado es una forma de crear un render de un template
+    #template = loader.get_template('polls/index.html')
+    #return HttpResponse(template.render(context, request))
+    
+    return render(request, 'polls/index.html', context )
