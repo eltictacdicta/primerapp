@@ -1,25 +1,51 @@
 from multiprocessing import context
-from re import template
-from django.shortcuts import render
-from django.http import HttpResponse
-from .models import Question
-from django.template import loader
+#from re import template
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from .models import Question, Choice
+from django.urls import reverse
+#from django.template import loader
 
 # Create your views here.
-
+\
 """def index(request):
     return HttpResponse("Hola mundo")"""
 
 
 def detail(request, question_id):
-    return HttpResponse("Detail %s" % question_id)
+    '''try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Esta página de detalle no existe")'''
+    question = get_object_or_404(Question, pk=question_id)
+    #choices = question.choice_set.all()
+    return render(request, 'polls/detail.html', {'question':question} )
+    #return HttpResponse("Detail %s" % question_id)
     
 def results(request, question_id):
     response = "Results %s" 
     return HttpResponse(response % question_id)
 
 def vote(request, question_id):
-    return HttpResponse("Vote %s" % question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk= request.POST['choice'])
+    except(KeyError, Choice.DoesNotExist):
+        return render(request, 'polls/detail.html', {
+            'question':question,
+            'error_message':'No se ha seleccionado ninguna opción'
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        return HttpResponseRedirect(reverse('polls:results', args=[question_id]))
+
+    seleccionado = str(request.POST['choice'])
+    print(seleccionado)
+    context = {
+        'seleccionado' : seleccionado,
+    }
+    return render(request, 'polls/vote.html', context )
 
 
 def index(request):

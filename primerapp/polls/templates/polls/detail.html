@@ -1,0 +1,20 @@
+{% if error_message %}
+{{error_message}}
+{% endif %}
+<h1>{{question.question_text}}</h1>
+Respuestas
+<ul>
+{% for choice in question.choice_set.all %}
+    <li>{{ choice }}</li>
+{% endfor %}
+</ul>
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+    {% csrf_token %}
+    <br>
+    {% for choice in question.choice_set.all %}
+        <label>{{ choice.choice_text }}</label>
+        <input type="radio" name="choice" value="{{ choice.id }}"><br>
+    {% endfor %}
+    <input type="submit" value="Enviar">
+</form>
